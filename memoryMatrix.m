@@ -55,9 +55,19 @@ classdef memoryMatrix
             if a > b
                 correlation = obj.Mem(b,a);
             end
-            %Might be changed based on future uses of the memMatrix 
-            %i.e the bottom-left might be different than the upper-right
-            %portion
+        end
+        function obj = setCorrelation(obj, a, b, correlation)
+            a = wordToIndex(a);
+            b = wordToIndex(b);
+            %Will probally add a bool to determine whether it will be added
+            %to bottom-left or top-right memory
+            if b > a
+                obj.Mem(a,b) = correlation;
+            end
+            if a > b
+                obj.Mem(b,a) = correlation;
+            end
+            
         end
     end
     
