@@ -8,24 +8,38 @@ classdef memoryMatrix
     end
     
     methods
-        function Init(obj)
+        function obj = set.Mem(obj, value)
+            obj.Mem = value;
+        end
+        function obj = set.wordMem(obj, value)
+            obj.wordMem = value; 
+        end
+        function value = get.Mem(obj)
+            value = obj.Mem;
+        end
+        function value = get.wordMem(obj)
+            value = obj.wordMem;
+        end
+        function obj = Init(obj)
             Ball = Word('ball', 1);
             Cool = Word('cool', 2);
             %Test words
             obj.wordMem = [Ball, Cool];
-            obj.Mem = zeros(size(obj.wordMem), size(obj.wordMem));
+            sz = size(obj.wordMem);
+            sz = sz(1,2);
+            obj.Mem = zeros([sz, sz]);
         end
         function word = indexToWord(obj, n)
-            for idx = 1:numel(wordMem)
-                element = wordMem(idx);
+            for idx = 1:numel(obj.wordMem)
+                element = obj.wordMem(idx);
                 if element.Index == n
-                    word = element.Name
+                    word = element.Name;
                 end
             end
         end
         function index = wordToIndex(obj, n)
-            for idx = 1:numel(wordMem)
-                element = wordMem(idx);
+            for idx = 1:numel(obj.wordMem)
+                element = obj.wordMem(idx);
                 if element.Name == n
                     index = element.Index;
                 end
