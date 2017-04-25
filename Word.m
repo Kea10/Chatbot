@@ -10,15 +10,30 @@ classdef Word
         
         Index
         
+        Type
+        
     end
     
     methods
         
         % A simple contstructor for the word class
+        function value = get.Name(obj)
+            value = obj.Name;
+        end
+        function obj = set.Name(obj, value)
+            obj.Name = value;
+        end
+        function value = get.Type(obj)
+            value = obj.Type;
+        end
+        function obj = set.Type(obj, value)
+            obj.Type = value;
+        end
 
-        function obj = Word(name, index)
+        function obj = Word(name, index, data)
             obj.Name = name;
             obj.Index = index;
+            obj.Type = data;
         end
         
     end

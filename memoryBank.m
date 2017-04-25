@@ -20,10 +20,12 @@ classdef memoryBank
         function value = get.capacity(obj)
             value = obj.capacity;
         end
+        % weight is a precentage. In the function it is used relative to
+        % the capacity.
         function a = addValue(obj, data, weight)
             for i = 1:numel(bank)
                 element = array(i);
-                
+                element.weight = element.weight * ((weight / 100) * capacity);
             end
         end
             

@@ -1,10 +1,6 @@
 % Init
+close all;
+global debugvar;
 memory = memoryMatrix;
 memory = memory.Init();
-% Load Content
-
-% Loop
-
-% Update Loop
-
-% Draw Loop
+memory.parseText('Balls are cool');
