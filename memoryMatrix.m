@@ -66,9 +66,10 @@ classdef memoryMatrix
         end
         
         function index = wordToIndex(obj, n)
+            index = 'does not exist';
             for idx = 1:numel(obj.wordMem)
                 element = obj.wordMem(idx);
-                if element.Name == n
+                if strcmp(element.Name, lower(n))
                     index = element.Index;
                 end
             end
@@ -90,12 +91,7 @@ classdef memoryMatrix
             a = wordToIndex(a);
             b = wordToIndex(b);
             correlation = 1;
-            if b > a
-                correlation = obj.Mem(a,b);
-            end
-            if a > b
-                correlation = obj.Mem(b,a);
-            end
+            correlation = obj.Mem(a,b);
         end
         
         % Sets the correlation between two strings in the memory matrix to a certain value.
@@ -118,7 +114,7 @@ classdef memoryMatrix
         
         function obj = parseText(obj, text)
            array = text;
-           textdata = [];
+           textdata = {};
            parsedtext = strsplit(array);
            for idx = 1:numel(parsedtext)
                 element = char(parsedtext(idx));
@@ -127,13 +123,32 @@ classdef memoryMatrix
                 index = indexToWord(obj, thing);
                 switch index.Type
                     case 'lverb'
-                        
+                         textdata(numel(textdata,2)+1) = {'set'};
+                         textdata(numel(textdata,2)+1) = {wordToIndex(obj, char(parsedtext(idx - 1))) + ' = ' + wordToIndex(obj, char(parsedtext(idx + 1)))};
+                         textdata(numel(textdata,2)+1) = {'end'};
                     case 'noun'
                        
                     case 'adjective'
                         
                 end
-            end
+               
+           end
+             ChangeData(obj, textdata);
+        end
+        function obj = ChangeData(obj, textdata)
+             command = '';
+             for idx = 1:numel(textdata)
+                element = textdata(idx);
+                if strcmp(textdata, 'set')
+                    command = 'set';
+                end
+                if strcmp(command, 'set')
+                    text = strsplit(wordToIndex(name), ' = ');
+                    word = wordToIndex(text(0));
+                    property = wordToIndex(text(1));
+                    setCorrelation(word, property,((getCorrelation(word, property) + 1) / 2));
+                end
+             end
         end
     end
     

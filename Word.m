@@ -29,6 +29,12 @@ classdef Word
         function obj = set.Type(obj, value)
             obj.Type = value;
         end
+        function value = get.Index(obj)
+            value = obj.Index;
+        end
+        function obj = set.Index(obj, value)
+            obj.Index = value;
+        end
 
         function obj = Word(name, index, data)
             obj.Name = name;

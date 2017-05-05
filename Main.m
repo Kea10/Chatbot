@@ -3,4 +3,4 @@ close all;
 global debugvar;
 memory = memoryMatrix;
 memory = memory.Init();
-memory.parseText('Balls are cool');
+memory.parseText('Ball are cool');
