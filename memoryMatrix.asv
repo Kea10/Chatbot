@@ -102,50 +102,36 @@ classdef memoryMatrix
             
             %Will probally add a bool to determine whether it will be added
             %to bottom-left or top-right memory
-            
-            if b > a
-                obj.Mem(a,b) = correlation;
-            end
-            
-            if a > b
-                obj.Mem(b,a) = correlation;
-            end
+            obj.Mem(a,b) = correlation;
         end
         
         function obj = parseText(obj, text)
            array = text;
-           textdata = [];
+           textdata = string({});
            parsedtext = strsplit(array);
            for idx = 1:numel(parsedtext)
                 element = char(parsedtext(idx));
-                
                 thing = wordToIndex(obj, element);
-                index = indexToWord(obj, thing);
-                switch index.Type
+                word = indexToWord(obj, thing);
+                switch word.Type
                     case 'lverb'
-                         textdata(size(textdata,2)+1) = 'set';
-                         textdata(size(textdata,2)+1) = wordToIndex(obj, char(parsedtext(idx - 1))) + ' = ' + wordToIndex(char(parsedtext(idx + 1)));
-                         textdata(size(textdata,2)+1) = 'end';
+                         
                     case 'noun'
-                       
+                       textdata(size(textdata,2)+1) = word.Name;
                     case 'adjective'
-                        
+                       textdata(size(textdata,2)+1) = word.Name;
                 end
-                ChangeData(textdata);
-            end
+               
+           end
+             ChangeData(obj, textdata);
         end
         function obj = ChangeData(obj, textdata)
              command = '';
-             for idx = 1:numel(textdata)
+             for idx = 1:size(textdata)
                 element = textdata(idx);
-                if element == 'set'
-                    command = 'set';
-                end
-                if command == 'set'
-                    text = strsplit(wordToIndex(name), ' = ');
-                    word = wordToIndex(text(0));
-                    property = wordToIndex(text(1));
-                    setCorrelation(word, property,((getCorrelation(word, property) + 1) / 2));
+                for idx = 1:size(textdata)
+                    corelement = textdata(idx);
+                    setCorrelation(obj, element, corelement, (getCorrelation(obj, element, corelement) + 1) / 2);
                 end
              end
         end

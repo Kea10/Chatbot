@@ -66,10 +66,10 @@ classdef memoryMatrix
         end
         
         function index = wordToIndex(obj, n)
-            index = 'does not exist';
-            for idx = 1:numel(obj.wordMem)
+            index = string('does not exis');
+            for idx = 1:size(obj.wordMem, 2)
                 element = obj.wordMem(idx);
-                if strcmp(element.Name, lower(n))
+                if strcmp(element.Name, lower(char(n)))
                     index = element.Index;
                 end
             end
@@ -88,65 +88,49 @@ classdef memoryMatrix
         % memory matrix.
         
         function correlation = getCorrelation(obj, a, b)
-            a = wordToIndex(a);
-            b = wordToIndex(b);
+            stringa = wordToIndex(obj, a);
+            stringb = wordToIndex(obj, b);
             correlation = 1;
-            correlation = obj.Mem(a,b);
+            correlation = obj.Mem(stringa,stringb);
         end
         
         % Sets the correlation between two strings in the memory matrix to a certain value.
         
         function obj = setCorrelation(obj, a, b, correlation)
-            a = wordToIndex(a);
-            b = wordToIndex(b);
+            stringa = wordToIndex(obj, a);
+            stringb = wordToIndex(obj, b);
             
             %Will probally add a bool to determine whether it will be added
             %to bottom-left or top-right memory
-            
-            if b > a
-                obj.Mem(a,b) = correlation;
-            end
-            
-            if a > b
-                obj.Mem(b,a) = correlation;
-            end
+            obj.Mem(stringa,stringb) = correlation;
         end
         
         function obj = parseText(obj, text)
            array = text;
-           textdata = {};
+           textdata = string({});
            parsedtext = strsplit(array);
            for idx = 1:numel(parsedtext)
                 element = char(parsedtext(idx));
-                
                 thing = wordToIndex(obj, element);
-                index = indexToWord(obj, thing);
-                switch index.Type
+                word = indexToWord(obj, thing);
+                switch word.Type
                     case 'lverb'
-                         textdata(numel(textdata,2)+1) = {'set'};
-                         textdata(numel(textdata,2)+1) = {wordToIndex(obj, char(parsedtext(idx - 1))) + ' = ' + wordToIndex(obj, char(parsedtext(idx + 1)))};
-                         textdata(numel(textdata,2)+1) = {'end'};
+                         
                     case 'noun'
-                       
+                       textdata(size(textdata,2)+1) = word.Name;
                     case 'adjective'
-                        
+                       textdata(size(textdata,2)+1) = word.Name;
                 end
                
            end
-             ChangeData(obj, textdata);
+           obj = ChangeData(obj, textdata);
         end
         function obj = ChangeData(obj, textdata)
-             command = '';
              for idx = 1:numel(textdata)
                 element = textdata(idx);
-                if strcmp(textdata, 'set')
-                    command = 'set';
-                end
-                if strcmp(command, 'set')
-                    text = strsplit(wordToIndex(name), ' = ');
-                    word = wordToIndex(text(0));
-                    property = wordToIndex(text(1));
-                    setCorrelation(word, property,((getCorrelation(word, property) + 1) / 2));
+                for idx = idx:numel(textdata)
+                    corelement = textdata(idx);
+                    obj = setCorrelation(obj, element, corelement, (getCorrelation(obj, element, corelement) + 1) / 2);
                 end
              end
         end
