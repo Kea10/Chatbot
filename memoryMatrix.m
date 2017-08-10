@@ -66,7 +66,7 @@ classdef memoryMatrix
         end
         
         function index = wordToIndex(obj, n)
-            index = string('does not exis');
+            index = string('does not exist');
             for idx = 1:size(obj.wordMem, 2)
                 element = obj.wordMem(idx);
                 if strcmp(element.Name, lower(char(n)))
@@ -103,6 +103,7 @@ classdef memoryMatrix
             %Will probally add a bool to determine whether it will be added
             %to bottom-left or top-right memory
             obj.Mem(stringa,stringb) = correlation;
+            
         end
         
         function obj = parseText(obj, text)
@@ -123,9 +124,9 @@ classdef memoryMatrix
                 end
                
            end
-           obj = ChangeData(obj, textdata);
+           obj = changeData(obj, textdata);
         end
-        function obj = ChangeData(obj, textdata)
+        function obj = changeData(obj, textdata)
              for idx = 1:numel(textdata)
                 element = textdata(idx);
                 for idx = idx:numel(textdata)
@@ -133,6 +134,15 @@ classdef memoryMatrix
                     obj = setCorrelation(obj, element, corelement, (getCorrelation(obj, element, corelement) + 1) / 2);
                 end
              end
+        end
+        function obj = writeData(obj)
+            save('MemoryData.mat', 'obj.Mem');
+            save('WordMemoryData.mat', 'obj.wordMem');
+        end
+        function obj = readData(obj)
+            obj.Mem = load('MemoryData.mat');
+            obj.wordMem = load('WordMemoryData.mat');
+            
         end
     end
     
