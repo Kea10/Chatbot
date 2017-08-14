@@ -1,6 +1,8 @@
 % Init
 close all;
 global debugvar;
+global MemSaveData;
+global WordMemSaveData;
 memory = memoryMatrix;
 memory = memory.Init();
 memory = memory.writeData();
