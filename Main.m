@@ -5,6 +5,6 @@ global MemSaveData;
 global WordMemSaveData;
 memory = memoryMatrix;
 memory = memory.Init();
-memory = memory.writeData();
 memory = memory.parseText('Ball are cool');
+memory = memory.writeData();
 disp(memory.Mem);

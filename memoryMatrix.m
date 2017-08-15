@@ -42,14 +42,7 @@ classdef memoryMatrix
         % text document. 
         
         function obj = Init(obj)
-            Ball = Word('ball', 1, 'noun');
-            Cool = Word('cool', 2, 'adjective');
-            Are = Word('are', 3, 'lverb');
-            %Test words
-            obj.wordMem = [Ball, Cool, Are];
-            sz = size(obj.wordMem);
-            sz = sz(1,2);
-            obj.Mem = zeros([sz, sz]);
+            obj = readData(obj);
         end
         
         % The next two functions take an index or a string respectivly and
@@ -57,6 +50,7 @@ classdef memoryMatrix
         % convient function for other methods.
         
         function word = indexToWord(obj, n)
+            word = '';
             for idx = 1:numel(obj.wordMem)
                 element = obj.wordMem(idx);
                 if element.Index == n
