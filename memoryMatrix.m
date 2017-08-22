@@ -60,10 +60,10 @@ classdef memoryMatrix
         end
         
         function index = wordToIndex(obj, n)
-            index = string('does not exist');
+            index = 'does not exist');
             for idx = 1:size(obj.wordMem, 2)
                 element = obj.wordMem(idx);
-                if strcmp(element.Name, lower(char(n)))
+                if strcmp(element.Name, char(n))
                     index = element.Index;
                 end
             end
@@ -100,6 +100,10 @@ classdef memoryMatrix
             
         end
         
+        function obj = learnWord(obj, word)
+            wordMem(wordMem.size + 2) = word;
+        end
+        
         function obj = parseText(obj, text)
            array = text;
            textdata = string({});
@@ -107,7 +111,12 @@ classdef memoryMatrix
            for idx = 1:numel(parsedtext)
                 element = char(parsedtext(idx));
                 thing = wordToIndex(obj, element);
+                if strcmp(thing, 'does not exist')
+                    word = Word(element,0,'unknown')
+                    learnWord(obj, word);
+                else
                 word = indexToWord(obj, thing);
+                end
                 switch word.Type
                     case 'lverb'
                          
@@ -115,8 +124,10 @@ classdef memoryMatrix
                        textdata(size(textdata,2)+1) = word.Name;
                     case 'adjective'
                        textdata(size(textdata,2)+1) = word.Name;
+                    case 'unknown'
+                        
+                        
                 end
-               
            end
            obj = changeData(obj, textdata);
         end
@@ -142,6 +153,4 @@ classdef memoryMatrix
             obj.wordMem = WordMemSaveData;
         end
     end
-    
 end
-
