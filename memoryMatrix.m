@@ -100,10 +100,11 @@ classdef memoryMatrix
             
         end
         
-        function obj = learnWord(obj, word)
-            wordMem[size(wordMem) + 2] = word;
-            [x,y] = size(Mem);
-            Mem[x+2][y+2] = 0;
+        function obj = learnWord(obj, thing)
+            
+            obj.wordMem(size(obj.wordMem) + 1) = thing;
+            [x,y] = size(obj.Mem);
+            obj.Mem(x+1,y+1) = 0;
         end
         
         function obj = parseText(obj, text)
@@ -114,8 +115,8 @@ classdef memoryMatrix
                 element = char(parsedtext(idx));
                 thing = wordToIndex(obj, element);
                 if strcmp(thing, 'does not exist')
-                    word = Word(element,0,'unknown')
-                    learnWord(obj, word);
+                    word = Word(element,size(obj.wordMem) + 1,'unknown');
+                    obj = learnWord(obj, word);
                 else
                 word = indexToWord(obj, thing);
                 end
