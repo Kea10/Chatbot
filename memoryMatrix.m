@@ -101,8 +101,8 @@ classdef memoryMatrix
         end
         
         function obj = learnWord(obj, thing)
-            
-            obj.wordMem(size(obj.wordMem) + 1) = thing;
+            [x,y] = size(obj.wordMem)
+            obj.wordMem(y + 1) = thing;
             [x,y] = size(obj.Mem);
             obj.Mem(x+1,y+1) = 0;
         end
