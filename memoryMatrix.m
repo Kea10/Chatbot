@@ -115,7 +115,8 @@ classdef memoryMatrix
                 element = char(parsedtext(idx));
                 thing = wordToIndex(obj, element);
                 if strcmp(thing, 'does not exist')
-                    word = Word(element,size(obj.wordMem) + 1,'unknown');
+                    [x,y] = size(obj.wordMem);
+                    word = Word(element, y + 1, 'unknown');
                     obj = learnWord(obj, word);
                 else
                 word = indexToWord(obj, thing);
@@ -151,8 +152,8 @@ classdef memoryMatrix
         end
         function obj = readData(obj)
             load('MemoryData.mat');
-            load('WordMemoryData.mat');
             obj.Mem = MemSaveData;
+            load('WordMemoryData.mat');
             obj.wordMem = WordMemSaveData;
         end
     end
