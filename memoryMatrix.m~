@@ -104,7 +104,7 @@ classdef memoryMatrix
             [x,y] = size(obj.wordMem)
             obj.wordMem(y + 1) = thing;
             [x,y] = size(obj.Mem);
-            obj.Mem(x+1,y+1) = .5;
+            obj.Mem(x+1,y+1) = 0;
         end
         
         function obj = parseText(obj, text)
@@ -144,22 +144,14 @@ classdef memoryMatrix
            obj = changeData(obj, textdata);
         end
         function obj = changeData(obj, textdata)
-             negative = false;
              for idx = 1:numel(textdata)
                 element = textdata(idx);
                     for sidx = idx:numel(textdata)
                         corelement = textdata(sidx);
-                        if strcmp(corelement, 'not')
-                            negative = true;
-                        end
-                        if negative
-                            obj = setCorrelation(obj, element, corelement, (getCorrelation(obj, element, corelement) + 0) / 2);
-                            negative = false;
-                        else
-                            obj = setCorrelation(obj, element, corelement, (getCorrelation(obj, element, corelement) + 1) / 2);
-                        end
+                        if strcmp(cor
+                        obj = setCorrelation(obj, element, corelement, (getCorrelation(obj, element, corelement) + 1) / 2);
                     end
-                    
+                end
              end
         end
         function obj = writeData(obj)
