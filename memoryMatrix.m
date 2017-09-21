@@ -69,13 +69,15 @@ classdef memoryMatrix
             end
         end
         
-        function index = stringToIndex(obj, n, type)
+        function thing = stringToWord(obj, n)
+            index = 'does not exist';
             for idx = 1:numel(obj.wordMem)
                 element = obj.wordMem(idx);
-                if element.Name == n && element.Type == type
+                if element.Name == n
                     index = element.Index;
                 end
             end
+            thing = indexToWord(obj,index);
         end
         
         % A handy function to get a correlation between two strings in the
@@ -104,7 +106,7 @@ classdef memoryMatrix
             [x,y] = size(obj.wordMem)
             obj.wordMem(y + 1) = thing;
             [x,y] = size(obj.Mem);
-            obj.Mem(x+1,y+1) = .5;
+            obj.Mem(x+1,y+1) = 0;
         end
         
         function obj = parseText(obj, text)
@@ -127,11 +129,13 @@ classdef memoryMatrix
                 if strcmp(word.Name, 'not')
                     word.Type = 'negative';
                 end
+                if strcmp(word.Name, 'a')
+                    word.Type = 'article'
+                end
                 switch word.Type
                     case 'lverb'
                          
                     case 'noun'
-                       
                        textdata(size(textdata,2)+1) = word.Name;
                     case 'adjective'
                        textdata(size(textdata,2)+1) = word.Name;
@@ -139,6 +143,7 @@ classdef memoryMatrix
                         textdata(size(textdata,2)+1) = word.Name;
                     case 'negative'
                         textdata(size(textdata,2)+1) = 'not';
+                    case 'article'
                 end
            end
            obj = changeData(obj, textdata);
@@ -149,11 +154,11 @@ classdef memoryMatrix
                 element = textdata(idx);
                     for sidx = idx:numel(textdata)
                         corelement = textdata(sidx);
-                        if strcmp(corelement, 'not')
+                        if strcmp('negative', stringToWord(obj, corelement))
                             negative = true;
                         end
                         if negative
-                            obj = setCorrelation(obj, element, corelement, (getCorrelation(obj, element, corelement) + 0) / 2);
+                            obj = setCorrelation(obj, element, corelement, (getCorrelation(obj, element, corelement) - 1) / 2);
                             negative = false;
                         else
                             obj = setCorrelation(obj, element, corelement, (getCorrelation(obj, element, corelement) + 1) / 2);
