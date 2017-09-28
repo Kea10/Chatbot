@@ -6,6 +6,6 @@ global WordMemSaveData;
 memory = memoryMatrix;
 memory = memory.Init();
 memory = memory.parseText('A chair is a piece of furniture');
-memory = memory.writeData();2
+memory = memory.writeData();
 memory = memory.readData();
 disp(memory.Mem);

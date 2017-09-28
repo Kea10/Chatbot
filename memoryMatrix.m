@@ -132,11 +132,16 @@ classdef memoryMatrix
                 if strcmp(word.Name, 'a')
                     word.Type = 'article'
                 end
+                inSubject = false;
                 switch word.Type
                     case 'lverb'
                          
                     case 'noun'
                        textdata(size(textdata,2)+1) = word.Name;
+                       if inSubject
+                           inSubject = false;
+                           textdata(size(textdata,2)+1) = ')s';
+                       end
                     case 'adjective'
                        textdata(size(textdata,2)+1) = word.Name;
                     case 'unknown'
@@ -144,6 +149,10 @@ classdef memoryMatrix
                     case 'negative'
                         textdata(size(textdata,2)+1) = 'not';
                     case 'article'
+                        if strcmp(indexToWord(obj, wordToIndex(obj, char(parsedtext(idx + 1)))).Type, 'noun')
+                            textdata(size(textdata,2)+1) = 's(';
+                            inSubject = true;
+                        end
                 end
            end
            obj = changeData(obj, textdata);
@@ -152,18 +161,21 @@ classdef memoryMatrix
              negative = false;
              for idx = 1:numel(textdata)
                 element = textdata(idx);
-                    for sidx = idx:numel(textdata)
-                        corelement = textdata(sidx);
-                        if strcmp('negative', stringToWord(obj, corelement))
-                            negative = true;
-                        end
-                        if negative
-                            obj = setCorrelation(obj, element, corelement, (getCorrelation(obj, element, corelement) - 1) / 2);
-                            negative = false;
-                        else
-                            obj = setCorrelation(obj, element, corelement, (getCorrelation(obj, element, corelement) + 1) / 2);
-                        end
+                if strcmp('s(', element)
+                    
+                end
+                for sidx = idx:numel(textdata)
+                    corelement = textdata(sidx);
+                    if strcmp('negative', stringToWord(obj, corelement).Type)
+                        negative = true;
                     end
+                    if negative
+                        obj = setCorrelation(obj, element, corelement, (getCorrelation(obj, element, corelement) - 1) / 2);
+                        negative = false;
+                    else
+                        obj = setCorrelation(obj, element, corelement, (getCorrelation(obj, element, corelement) + 1) / 2);
+                    end
+                end
                     
              end
         end
