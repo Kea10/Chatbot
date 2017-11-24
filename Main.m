@@ -5,7 +5,7 @@ global MemSaveData;
 global WordMemSaveData;
 memory = memoryMatrix;
 memory = memory.Init();
-memory = memory.parseText('A chair is a piece of furniture');
+memory = memory.parseText('cats are the cure to cancer');
 memory = memory.writeData();
 memory = memory.readData();
 disp(memory.Mem);
