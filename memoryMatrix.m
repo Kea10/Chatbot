@@ -15,6 +15,8 @@ classdef memoryMatrix
         % in order to correlate a position on the matrix with two words.
         
         wordMem
+        
+        know
     end
    
     methods
@@ -186,24 +188,25 @@ classdef memoryMatrix
              %be groups within groups, but this is OK for now. Adds each
              %group or lone word into a component list.
 
-             components = [];
+             components = {};
              while idx <= numel(textdata)
                 element = textdata(idx);
                 if strcmp(element, '(')
-                    sidx = idx;
-                    group = [];
+                    sidx = idx + 1;
+                    group = {};
                     while sidx <= numel(textdata)
                         selement = textdata(sidx);
                         if strcmp(selement, ')')
                             sidx = numel(textdata);
                             idx = sidx + 1;
                         else
-                            group(numel(group)+1) = selement;
+                            group(numel(group)+1) = {selement};
                         end
                         sidx = sidx + 1;
                     end
-                    components(numel(components)+1) = group;
+                    components(numel(components)+1) = {group};
                 end
+                idx = idx + 1;
              end
              
              %Correlated each component to each component after it.
@@ -217,13 +220,16 @@ classdef memoryMatrix
                      obj = Cor(obj, element, selement);
                      sidx = sidx + 1;
                  end
-                     
+                 idx = idx + 1 
              end
-             idx = idx + 1
+             
         end
         
         function obj = CorWW(obj, word1, word2)
             obj = setCorrelation(obj, word1, word2, (getCorrelation(obj, word1, word2)+1)/2);
+            obj.know = obj.know + 2;
+            setCorrelation(obj, word1, word1, (getCorrelation(obj, word1, word1)+1));
+            setCorrelation(obj, word2, word2, (getCorrelation(obj, word2, word2)+1));
         end
         
         function obj = CorWG(obj, word, group)
