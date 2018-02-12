@@ -137,7 +137,6 @@ classdef memoryMatrix
                 if strcmp(word.Name, 'a')
                     word.Type = 'article'
                 end
-                inSubject = false;
                 switch word.Type
                     case 'lverb'
                        textdata(size(textdata,2)+1) = word.Name;
