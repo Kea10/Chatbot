@@ -5,12 +5,17 @@ global MemSaveData;
 global WordMemSaveData;
 memory = memoryMatrix;
 memory = memory.Init();
-memory = memory.parseText('cats are cool');
+memory.Mem = zeros(size(memory.Mem));
+smap = stimulusMap(memory);
+previousinstance = memory;
+memory = memory.parseText('cats are cute');
+previousinstance = currentinstance;
+currentinstance = memory;
+for i = 1:5
+    [newinstance,smap] = smap.updateStimulus(previousinstance,currentinstance);
+    previousinstance = currentinstance;
+    currentinstance = newinstance;
+end
 memory = memory.writeData();
 memory = memory.readData();
 heatmap = HeatMap(memory.Mem);
-%for idx = 1:numel(memory.wordMem)
-%                element = memory.wordMem(idx).Name;
-%                heatmap.RowLabels(idx) = element;
-%                heatmap.ColumnLabels(idx) = element;
-%end
